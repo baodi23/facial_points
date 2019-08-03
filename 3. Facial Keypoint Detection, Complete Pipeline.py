@@ -13,7 +13,7 @@
 
 # In the next python cell we load in required libraries for this section of the project.
 
-# In[1]:
+# In[7]:
 
 
 import numpy as np
@@ -26,7 +26,7 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 # 
 # Select an image to perform facial keypoint detection on; you can select any image of faces in the `images/` directory.
 
-# In[2]:
+# In[8]:
 
 
 import cv2
@@ -53,7 +53,7 @@ plt.imshow(image)
 # <img src='images/haar_cascade_ex.png' width=80% height=80%/>
 # 
 
-# In[3]:
+# In[9]:
 
 
 # load in a haar cascade classifier for detecting frontal faces
@@ -84,7 +84,7 @@ plt.imshow(image_with_detections)
 # 
 # First, load your best model by its filename.
 
-# In[4]:
+# In[10]:
 
 
 import torch
@@ -94,7 +94,7 @@ net = Net()
 
 ## TODO: load the best saved model parameters (by your path name)
 ## You'll need to un-comment the line below and add the correct name for *your* saved model
-net.load_state_dict(torch.load('saved_models/keypoints_model_10.pt'))
+net.load_state_dict(torch.load('saved_models/keypoints_model_3.pt'))
 
 ## print out your net and prepare it for testing (uncomment the line below)
 net.eval()
@@ -124,17 +124,14 @@ net.eval()
 # 
 # 
 
-# In[5]:
+# In[11]:
 
 
 def show_keypoints(image, key_pts):
     """Show image with keypoints"""
     plt.imshow(image)
     plt.scatter(key_pts[:, 0], key_pts[:, 1], s=20, marker='.', c='m')
-
-
-# In[ ]:
-
+    
 
 image_copy = np.copy(image)
 
@@ -151,7 +148,7 @@ for (x,y,w,h) in faces:
     
     ## TODO: Convert the face region from RGB to grayscale
     roi = cv2.cvtColor(roi, cv2.COLOR_RGB2GRAY)
-    print(roi.shape)
+#     print(roi.shape)
     
 
     ## TODO: Normalize the grayscale image so that its color range falls in [0,1] instead of [0,255]
@@ -164,15 +161,15 @@ for (x,y,w,h) in faces:
     ## TODO: Reshape the numpy image shape (H x W x C) into a torch image shape (C x H x W)
     roi = np.reshape(roi, (224, 224, 1))
     roi = np.transpose(roi, (2, 0, 1))
-    print(roi.shape)
+#     print(roi.shape)
 #     plt.figure()
 #     plt.imshow(roi)
     ## TODO: Make facial keypoint predictions using your loaded, trained network 
     ## perform a forward pass to get the predicted facial keypoints
     roi = torch.from_numpy(roi).type(torch.FloatTensor)
     roi = roi.unsqueeze(0)
-    print(roi.type())
-    print("roi shape:", roi.shape)
+#     print(roi.type())
+#     print("roi shape:", roi.shape)
     keypoints = net(roi)
     keypoints = keypoints.data.numpy()
     keypoints = np.reshape(keypoints, (68, 2))
@@ -181,8 +178,8 @@ for (x,y,w,h) in faces:
     
     plt.figure()
     show_keypoints(roi_origin, keypoints)
-    print(keypoints.shape)
-    print(type(keypoints))
+#     print(keypoints.shape)
+#     print(type(keypoints))
 
     ## TODO: Display each detected face and the corresponding keypoints        
         
